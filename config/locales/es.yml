@@ -1,0 +1,7 @@
+# Spanish strings go here for Rails i18n
+es:
+  fixed_expenses: 'Gastos fijos'
+  variable_expenses: 'Gastos variables'
+  variable_income: 'Ingresos variables'
+
+  label_income_expenses_new: 'Nuevo valor'

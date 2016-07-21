@@ -1,0 +1,34 @@
+<%= title 'Gastos e Ingresos' %>
+
+<% IeIncomeExpense.get_subclasses.each do |klass| %>
+
+	<h3> <%= l(klass::OptionName) %> </h3>
+	<% income_expenses = IeIncomeExpense.all %>
+	<% if income_expenses.any? %>
+		<div class="autoscroll">
+			<table class="list">
+				<thead>
+					<tr>
+						<th><%= 'Tipo de petición' %></th>
+						<th><%= 'Importe' %></th>
+						<th><%= 'Fecha de creación' %></th>
+						<th><%= 'Fecha de facturación' %></th>
+						<th><%= l(:button_sort) %></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td class='name'><%= 'Ejemplo' %></td>
+						<td><%= 'Ejemplo' %></td>
+						<td><%= 'Ejemplo' %></td>
+						<td><%= 'Ejemplo' %></td>
+						<td class="buttons"><%= 'Ejemplo' %></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	<% end %>
+	<p><%= link_to l(:label_income_expenses_new), new_ie_income_expense_path(:type => klass.name) %></p>
+
+<% end %>

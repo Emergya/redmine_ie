@@ -1,3 +1,0 @@
-= redmine_ie
-
-Description goes here
