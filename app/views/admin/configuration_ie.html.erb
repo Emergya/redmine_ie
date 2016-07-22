@@ -29,6 +29,6 @@
 			</table>
 		</div>
 	<% end %>
-	<p><%= link_to l(:label_income_expenses_new), new_ie_income_expense_path(:type => klass.name) %></p>
+	<p><%= link_to l(:label_income_expenses_new), new_ie_income_expense_path(:type => klass.name, :type_name => l(klass::OptionName)) %></p>
 
 <% end %>

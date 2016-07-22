@@ -1,0 +1,11 @@
+<% content_for :header_tags do %>
+   <%= javascript_include_tag "/ie_income_expenses.js", :plugin => 'redmine_ie' %>
+<% end %>
+
+<%= form_for @income_expense do |f| %>
+
+	<%= f.hidden_field :type  %>
+	<%= render :partial => '/ie_income_expenses/partials/form', :locals => {:f => f, :type_name => params[:type_name]} %>
+	<%= submit_tag l(:button_create) %>
+
+<% end %>

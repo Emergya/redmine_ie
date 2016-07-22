@@ -10,6 +10,7 @@ class IeIncomeExpense < ActiveRecord::Base
 	def self.get_subclasses
 		subclasses
 	end
+
 end
 
 # Force load the subclasses in development mode

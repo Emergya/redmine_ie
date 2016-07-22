@@ -10,5 +10,4 @@ Redmine::Plugin.register :redmine_ie do
 	requires_redmine :version_or_higher => '3.2'
 
 	menu :admin_menu, :admin, { :controller => 'admin', :action => 'configuration_ie' }, :html => { :class => 'issue_statuses' }, :caption => 'Gastos e Ingresos'
-
 end
