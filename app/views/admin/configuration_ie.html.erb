@@ -18,13 +18,15 @@
 				</thead>
 
 				<tbody>
-					<tr>
-						<td class='name'><%= 'Ejemplo' %></td>
-						<td><%= 'Ejemplo' %></td>
-						<td><%= 'Ejemplo' %></td>
-						<td><%= 'Ejemplo' %></td>
-						<td class="buttons"><%= 'Ejemplo' %></td>
+					<% income_expenses.each do |income_expense| %>
+					<tr class="<%= cycle('odd', 'even') %>">
+						<td class='name'><%= Tracker.find(income_expense.tracker_id).name %></td>
+						<td><%= CustomField.find(income_expense.amount_field_id).name %></td>
+						<td><%= !/\A\d+\z/.match(income_expense.start_date_field) ? l(('field_'+ income_expense.start_date_field).to_sym) : CustomField.find(income_expense.start_date_field.to_i).name%></td>
+						<td><%= !/\A\d+\z/.match(income_expense.end_date_field) ? l(('field_'+ income_expense.end_date_field).to_sym) : CustomField.find(income_expense.end_date_field.to_i).name %></td>
+						<td class="buttons"><%= delete_link ie_income_expense_path(income_expense) %></td>
 					</tr>
+					<% end %>
 				</tbody>
 			</table>
 		</div>

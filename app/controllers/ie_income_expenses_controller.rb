@@ -12,12 +12,24 @@ class IeIncomeExpensesController < ApplicationController
         ie_income_expense = IeIncomeExpense.new ie_params
 
         if ie_income_expense.save
-            flash[:notice] = l(:"validation.flash_notice")
+            flash[:notice] = l(:"validation.flash_create_notice")
             redirect_to configuration_ie_path
         else
-            flash[:error] = l(:"validation.flash_error")
+            flash[:error] = l(:"validation.flash_create_error")
             redirect_to action: 'new', :type_name => params[:type_name]
         end
+    end
+
+    def destroy
+        income_expense = IeIncomeExpense.find params[:id]
+
+        if income_expense.destroy
+            flash[:notice] = l(:'validation.flash_destroy_notice')
+        else
+            flash[:error] = l(:'validation.flash_destroy_error')
+        end
+
+        redirect_to configuration_ie_path
     end
 
     #  Método para recoger los campos personalizados que pertenecen a un determinado tracker.
