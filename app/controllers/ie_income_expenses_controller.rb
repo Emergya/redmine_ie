@@ -8,6 +8,18 @@ class IeIncomeExpensesController < ApplicationController
         @trackers = Tracker.all.collect{|p| [p.name, p.id]}
     end
 
+    def create
+        ie_income_expense = IeIncomeExpense.new ie_params
+
+        if ie_income_expense.save
+            flash[:notice] = l(:"validation.flash_notice")
+            redirect_to configuration_ie_path
+        else
+            flash[:error] = l(:"validation.flash_error")
+            redirect_to action: 'new', :type_name => params[:type_name]
+        end
+    end
+
     #  Método para recoger los campos personalizados que pertenecen a un determinado tracker.
     def get_custom_fields
         tracker = Tracker.find(params[:tracker_id])
@@ -31,4 +43,9 @@ class IeIncomeExpensesController < ApplicationController
             format.json { render json: {:issue_date_fields => issue_date_fields} }
         end
     end
+
+    private
+        def ie_params
+            params.require(:ie_income_expense).permit(:tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type)
+        end
 end

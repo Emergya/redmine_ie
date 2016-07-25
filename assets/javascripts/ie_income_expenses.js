@@ -10,7 +10,6 @@ $(document).ready(function(){
 	});
 
 	function reloadSelectsField(){
-
 		fields_id = ['amount_field_id','start_date_field','end_date_field'];
 
 		// Se añade los campos personalizados en los selects cuya id este indicada en fields_id.
@@ -52,7 +51,7 @@ $(document).ready(function(){
 			success: function(data) { 
 				// Introducimos los campos personalizados.
 				for(var k=0; k<data.custom_fields.length; k++){	
-					$("#ie_income_expense_"+fields_id[i]).append("<option value="+ data.custom_fields[k][1] +">"+ data.custom_fields[k][0] +"</option>");
+					$("#ie_income_expense_"+fields_id[i]).append("<option value="+ parseInt(data.custom_fields[k][1]) +">"+ data.custom_fields[k][0] +"</option>");
 				}
 			},
 			error: function(xhr) { console.log(xhr); }

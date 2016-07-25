@@ -1,5 +1,5 @@
 <div class="box tabular">
-	<p><%= f.label "Tipo: " %> <%= params[:type_name]  %></p> <%= f.hidden_field :type  %>
+	<p><%= f.label "Tipo: " %> <%= params[:type_name]  %></p> <%= f.hidden_field :type, :value => params[:type] %>
 	<p><%= f.label "Tipo de petición: " %> <%= f.select :tracker_id, @trackers, {include_blank: true} %></p>
 	<p><%= f.label "Importe: " %> <%= f.select :amount_field_id, '' %></p>
 	<p><%= f.label "Fecha de inicio: " %> <%= f.select :start_date_field, ''  %></p>

@@ -3,6 +3,9 @@ class IeIncomeExpense < ActiveRecord::Base
 	belongs_to :tracker
 	include Redmine::SubclassFactory
 
+	# Validaciones
+	validates_presence_of :tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type
+
 	# Returns the Subclasses of IeIncomeExpenses.  Each Subclass needs to be
 	# required in development mode.
 	#
@@ -10,7 +13,6 @@ class IeIncomeExpense < ActiveRecord::Base
 	def self.get_subclasses
 		subclasses
 	end
-
 end
 
 # Force load the subclasses in development mode

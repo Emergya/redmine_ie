@@ -3,5 +3,8 @@ es:
   fixed_expenses: 'Gastos fijos'
   variable_expenses: 'Gastos variables'
   variable_income: 'Ingresos variables'
-
   label_income_expenses_new: 'Nuevo valor'
+
+  validation:
+    flash_notice: "El tipo de gasto/ingreso se ha realizado correctamente."
+    flash_error: "Es obligatorio rellenar cada uno de los campos del formulario."

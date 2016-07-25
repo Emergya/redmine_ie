@@ -2,6 +2,7 @@
    <%= javascript_include_tag "/ie_income_expenses.js", :plugin => 'redmine_ie' %>
 <% end %>
 
+<h2><%= params[:type_name] %></h2>
 <%= form_for @income_expense do |f| %>
 
 	<%= f.hidden_field :type  %>
