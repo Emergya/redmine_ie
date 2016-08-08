@@ -8,5 +8,7 @@ es:
   validation:
     flash_create_notice: 'El tipo de gasto/ingreso se ha realizado correctamente.'
     flash_create_error: 'Es obligatorio rellenar cada uno de los campos del formulario.'
+    flash_update_notice: 'El tipo de gasto/ingreso se ha actualizado correctamente.'
+    flash_update_error: 'Es obligatorio rellenar cada uno de los campos del formulario.'
     flash_destroy_notice: 'El gasto/ingreso se ha eliminado correctamente.'
     flash_destroy_error: 'Se ha producido un error al intentar eliminar el gasto/ingreso.'

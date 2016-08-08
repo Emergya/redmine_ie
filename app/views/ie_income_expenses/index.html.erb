@@ -1,9 +1,8 @@
 <%= title 'Gastos e Ingresos' %>
 
 <% IeIncomeExpense.get_subclasses.each do |klass| %>
-
 	<h3> <%= l(klass::OptionName) %> </h3>
-	<% income_expenses = IeIncomeExpense.all %>
+	<% income_expenses = klass.all %>
 	<% if income_expenses.any? %>
 		<div class="autoscroll">
 			<table class="list">
@@ -13,7 +12,7 @@
 						<th><%= 'Importe' %></th>
 						<th><%= 'Fecha de creación' %></th>
 						<th><%= 'Fecha de facturación' %></th>
-						<th><%= l(:button_sort) %></th>
+						<th></th>
 					</tr>
 				</thead>
 
@@ -24,12 +23,16 @@
 						<td><%= CustomField.find(income_expense.amount_field_id).name %></td>
 						<td><%= !/\A\d+\z/.match(income_expense.start_date_field) ? l(('field_'+ income_expense.start_date_field).to_sym) : CustomField.find(income_expense.start_date_field.to_i).name%></td>
 						<td><%= !/\A\d+\z/.match(income_expense.end_date_field) ? l(('field_'+ income_expense.end_date_field).to_sym) : CustomField.find(income_expense.end_date_field.to_i).name %></td>
-						<td class="buttons"><%= delete_link ie_income_expense_path(income_expense) %></td>
+						<td class="buttons">
+							<%= link_to '<span class="icon icon-edit">'.html_safe+l(:button_edit)+'</span>'.html_safe, edit_ie_income_expense_path(income_expense, :type => klass.name, :type_name => l(klass::OptionName)) %> 
+							<%= delete_link ie_income_expense_path(income_expense) %>
+						</td>
 					</tr>
 					<% end %>
 				</tbody>
 			</table>
 		</div>
+	<% reset_cycle %>
 	<% end %>
 	<p><%= link_to l(:label_income_expenses_new), new_ie_income_expense_path(:type => klass.name, :type_name => l(klass::OptionName)) %></p>
 

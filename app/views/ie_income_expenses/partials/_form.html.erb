@@ -1,7 +1,11 @@
-<div class="box tabular">
-	<p><%= f.label "Tipo: " %> <%= params[:type_name]  %></p> <%= f.hidden_field :type, :value => params[:type] %>
-	<p><%= f.label "Tipo de petición: " %> <%= f.select :tracker_id, @trackers, {include_blank: true} %></p>
-	<p><%= f.label "Importe: " %> <%= f.select :amount_field_id, '' %></p>
-	<p><%= f.label "Fecha de inicio: " %> <%= f.select :start_date_field, ''  %></p>
-	<p><%= f.label "Fecha de fin: " %> <%= f.select :end_date_field, ''  %></p>
-</div>
+<%= form_for(@income_expense, as: :ie_income_expense, url: params[:action] == 'new' ? ie_income_expenses_path(@income_expense) : ie_income_expense_path(@income_expense)) do |f| %>
+	<div class="box tabular">
+		<p><%= f.label "Tipo: " %> <%= @type_name  %></p> <%= f.hidden_field :type  %> <%= f.hidden_field :type_name, :value => @type_name  %>
+		<p><%= f.label "Tipo de petición: " %> <%= f.select :tracker_id, options_for_select(@trackers,@tracker.id), {}, :data => { :remote => true, :url => get_custom_fields_path(:type => params[:type], :type_name => params[:type_name],:id => @income_expense.id) } %></p>
+		<p><%= f.label "Importe: " %> <%= f.select :amount_field_id, options_for_select(get_fields_type_numeric(@tracker),@income_expense.amount_field_id) %></p>
+		<p><%= f.label "Fecha de inicio: " %> <%= f.select :start_date_field, options_for_select(get_fields_type_date(@tracker), @income_expense.start_date_field) %></p>
+		<p><%= f.label "Fecha de fin: " %> <%= f.select :end_date_field, options_for_select(get_fields_type_date(@tracker), @income_expense.end_date_field) %></p>
+	</div>
+	
+	<%= submit_tag l(:button_create) %>
+<% end %>

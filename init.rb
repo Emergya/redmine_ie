@@ -1,4 +1,3 @@
-require 'ie/admin_controller_patch'
 require 'ie/tracker_patch'
 
 Redmine::Plugin.register :redmine_ie do
@@ -9,5 +8,5 @@ Redmine::Plugin.register :redmine_ie do
 
 	requires_redmine :version_or_higher => '3.2'
 
-	menu :admin_menu, :admin, { :controller => 'admin', :action => 'configuration_ie' }, :html => { :class => 'issue_statuses' }, :caption => 'Gastos e Ingresos'
+	menu :admin_menu, :admin, { :controller => 'ie_income_expenses', :action => 'index' }, :html => { :class => 'issue_statuses' }, :caption => 'Gastos e Ingresos'
 end
