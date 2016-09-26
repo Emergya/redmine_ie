@@ -60,7 +60,7 @@ class IeIncomeExpensesController < ApplicationController
             (@income_expense.present? ? 
                 @income_expense.tracker : 
                 Tracker.first)
-        @trackers = Tracker.all.collect{|p| [p.name, p.id]}
+        @trackers = Tracker.all.reject{|x| IeIncomeExpense.where("tracker_id = ?", x.id).present?}.collect{|p| [p.name, p.id]}
     end
 
     #  Método para recoger los campos personalizados que pertenecen a un determinado tracker.
