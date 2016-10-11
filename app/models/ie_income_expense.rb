@@ -4,6 +4,7 @@ class IeIncomeExpense < ActiveRecord::Base
 	include Redmine::SubclassFactory
 
 	ALLOWED_ISSUE_FIELDS = [:start_date, :due_date, :created_on, :closed_on, :updated_on]
+	ALLOWED_FIELD_TYPES = [:attr, :cf, :status_id]
 
 	# Validaciones
 	validates_presence_of :tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type

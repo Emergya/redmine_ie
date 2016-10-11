@@ -5,6 +5,27 @@ es:
   variable_income: 'Ingresos variables'
   label_income_expenses_new: 'Nuevo valor'
 
+  ie:
+    label_income_expenses: 'Gastos e Ingresos'
+    label_fixed_expenses: 'Gastos fijos'
+    label_variable_expenses: 'Gastos variables'
+    label_variable_income: 'Ingresos variables'
+
+    label_income_expenses_new: 'Nuevo valor'
+
+    label_type: 'Tipo'
+    label_tracker: 'Tipo de petición'
+    label_amount: 'Importe'
+    label_start_date: 'Fecha de inicio'
+    label_end_date: 'Fecha de fin'
+
+    label_status_name: 'Estado: %{name}'
+    label_custom_field_name: 'Campo personalizado: %{name}'
+    label_attribute_name: 'Atributo: %{name}' 
+    label_attr_plural: 'Atributos'
+    label_cf_plural: 'Campos personalizados'
+    label_status_id_plural: 'Estados'
+
   validation:
     flash_create_notice: 'El tipo de gasto/ingreso se ha realizado correctamente.'
     flash_create_error: 'Es obligatorio rellenar cada uno de los campos del formulario.'

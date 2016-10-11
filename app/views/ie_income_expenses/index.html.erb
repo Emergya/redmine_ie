@@ -1,4 +1,4 @@
-<%= title 'Gastos e Ingresos' %>
+<%= title l(:"ie.label_income_expenses") %>
 
 <% IeIncomeExpense.get_subclasses.each do |klass| %>
 	<h3> <%= l(klass::OptionName) %> </h3>
@@ -8,10 +8,10 @@
 			<table class="list">
 				<thead>
 					<tr>
-						<th><%= 'Tipo de petición' %></th>
-						<th><%= 'Importe' %></th>
-						<th><%= 'Fecha de creación' %></th>
-						<th><%= 'Fecha de facturación' %></th>
+						<th><%=l(:"ie.label_tracker")%></th>
+						<th><%=l(:"ie.label_amount")%></th>
+						<th><%=l(:"ie.label_start_date")%></th>
+						<th><%=l(:"ie.label_end_date")%></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -21,10 +21,10 @@
 					<tr class="<%= cycle('odd', 'even') %>">
 						<td class='name'><%= Tracker.find(income_expense.tracker_id).name %></td>
 						<td><%= CustomField.find(income_expense.amount_field_id).name %></td>
-						<td><%= !/\A\d+\z/.match(income_expense.start_date_field) ? l(('field_'+ income_expense.start_date_field).to_sym) : CustomField.find(income_expense.start_date_field.to_i).name%></td>
-						<td><%= !/\A\d+\z/.match(income_expense.end_date_field) ? l(('field_'+ income_expense.end_date_field).to_sym) : CustomField.find(income_expense.end_date_field.to_i).name %></td>
+						<td><%= income_expense_start_date_field(income_expense) %></td>
+						<td><%= income_expense_end_date_field(income_expense) %></td>
 						<td class="buttons">
-							<%= link_to '<span class="icon icon-edit">'.html_safe+l(:button_edit)+'</span>'.html_safe, edit_ie_income_expense_path(income_expense, :type => klass.name, :type_name => l(klass::OptionName)) %> 
+							<%= link_to '<span class="icon icon-edit">'.html_safe+l(:button_edit)+'</span>'.html_safe, edit_ie_income_expense_path(income_expense, :type => klass.name) %> 
 							<%= delete_link ie_income_expense_path(income_expense) %>
 						</td>
 					</tr>
@@ -34,6 +34,6 @@
 		</div>
 	<% reset_cycle %>
 	<% end %>
-	<p><%= link_to l(:label_income_expenses_new), new_ie_income_expense_path(:type => klass.name, :type_name => l(klass::OptionName)) %></p>
+	<p><%= link_to l(:"ie.label_income_expenses_new"), new_ie_income_expense_path(:type => klass.name) %></p>
 
 <% end %>

@@ -1,11 +1,19 @@
-<%= form_for(@income_expense, as: :ie_income_expense, url: params[:action] == 'new' ? ie_income_expenses_path(@income_expense) : ie_income_expense_path(@income_expense)) do |f| %>
+<%= form_for(@income_expense, as: :ie_income_expense, url: @income_expense.new_record? ? ie_income_expenses_path : ie_income_expense_path(@income_expense)) do |f| %>
 	<div class="box tabular">
-		<p><%= f.label "Tipo: " %> <%= @type_name  %></p> <%= f.hidden_field :type  %> <%= f.hidden_field :type_name, :value => @type_name  %>
-		<p><%= f.label "Tipo de petición: " %> <%= f.select :tracker_id, options_for_select(@trackers,@tracker.id), {}, :data => { :remote => true, :url => get_custom_fields_path(:type => params[:type], :type_name => params[:type_name],:id => @income_expense.id) } %></p>
-		<p><%= f.label "Importe: " %> <%= f.select :amount_field_id, options_for_select(get_fields_type_numeric(@tracker),@income_expense.amount_field_id) %></p>
-		<p><%= f.label "Fecha de inicio: " %> <%= f.select :start_date_field, options_for_select(get_fields_type_date(@tracker), @income_expense.start_date_field) %></p>
-		<p><%= f.label "Fecha de fin: " %> <%= f.select :end_date_field, options_for_select(get_fields_type_date(@tracker), @income_expense.end_date_field) %></p>
+		<p><%= f.label l(:"ie.label_type")+": " %> <%= get_income_expense_type(@type) %></p> <%= f.hidden_field :type  %>
+		<p><%= f.label l(:"ie.label_tracker")+": " %> <%= f.select :tracker_id, options_for_select(@trackers,@tracker.id), {}, :data => { :remote => true, :url => get_custom_fields_path(:type => params[:type], :id => @income_expense.id) } %></p>
+		<p><%= f.label l(:"ie.label_amount")+": " %> <%= f.select :amount_field_id, options_for_select(get_fields_type_numeric(@tracker),@income_expense.amount_field_id) %></p>
+		<p><%= f.label l(:"ie.label_start_date")+": " %> 
+			<%= f.select :start_field_type, options_for_select(get_fields_type_options, @start_field_type), {}, :data => { :remote => true, :url => update_field_options_path(:type => 'start', :ie_income_expense => {:tracker_id => @tracker}) } %>
+			<span id="start_date_field">
+				<%= render :partial => '/ie_income_expenses/partials/date_field', :locals => {:type => 'start', :field_type => @start_field_type, :default_value => @income_expense.start_date_field} %>
+			</span></p>
+		<p><%= f.label l(:"ie.label_end_date")+": " %> 
+			<%= f.select :end_field_type, options_for_select(get_fields_type_options, @end_field_type), {}, :data => { :remote => true, :url => update_field_options_path(:type => 'end', :ie_income_expense => {:tracker_id => @tracker}) } %>
+			<span id="end_date_field">
+				<%= render :partial => '/ie_income_expenses/partials/date_field', :locals => {:type => 'end', :field_type => @end_field_type, :default_value => @income_expense.end_date_field} %>
+			</span></p>
 	</div>
 	
-	<%= submit_tag l(:button_create) %>
+	<%= submit_tag l(:button_save) %>
 <% end %>
