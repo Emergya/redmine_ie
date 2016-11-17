@@ -11,6 +11,7 @@
 						<th><%=l(:"ie.label_tracker")%></th>
 						<th><%=l(:"ie.label_amount")%></th>
 						<th><%=l(:"ie.label_start_date")%></th>
+						<th><%=l(:"ie.label_planned_end_date")%></th>
 						<th><%=l(:"ie.label_end_date")%></th>
 						<th></th>
 					</tr>
@@ -22,6 +23,7 @@
 						<td class='name'><%= Tracker.find(income_expense.tracker_id).name %></td>
 						<td><%= CustomField.find(income_expense.amount_field_id).name %></td>
 						<td><%= income_expense_start_date_field(income_expense) %></td>
+						<td><%= income_expense_planned_end_date_field(income_expense) %></td>
 						<td><%= income_expense_end_date_field(income_expense) %></td>
 						<td class="buttons">
 							<%= link_to '<span class="icon icon-edit">'.html_safe+l(:button_edit)+'</span>'.html_safe, edit_ie_income_expense_path(income_expense, :type => klass.name) %> 

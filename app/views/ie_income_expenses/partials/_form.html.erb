@@ -8,6 +8,11 @@
 			<span id="start_date_field">
 				<%= render :partial => '/ie_income_expenses/partials/date_field', :locals => {:type => 'start', :field_type => @start_field_type, :default_value => @income_expense.start_date_field} %>
 			</span></p>
+		<p><%= f.label l(:"ie.label_planned_end_date")+": " %> 
+			<%= f.select :planned_end_field_type, options_for_select(get_planned_fields_type_options, @planned_end_field_type), {}, :data => { :remote => true, :url => update_field_options_path(:type => 'planned_end', :ie_income_expense => {:tracker_id => @tracker}) } %>
+			<span id="planned_end_date_field">
+				<%= render :partial => '/ie_income_expenses/partials/date_field', :locals => {:type => 'planned_end', :field_type => @planned_end_field_type, :default_value => @income_expense.planned_end_date_field} %>
+			</span></p>
 		<p><%= f.label l(:"ie.label_end_date")+": " %> 
 			<%= f.select :end_field_type, options_for_select(get_fields_type_options, @end_field_type), {}, :data => { :remote => true, :url => update_field_options_path(:type => 'end', :ie_income_expense => {:tracker_id => @tracker}) } %>
 			<span id="end_date_field">

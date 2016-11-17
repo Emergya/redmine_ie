@@ -17,6 +17,7 @@ es:
     label_tracker: 'Tipo de petición'
     label_amount: 'Importe'
     label_start_date: 'Fecha de inicio'
+    label_planned_end_date: 'Fecha de fin planificada'
     label_end_date: 'Fecha de fin'
 
     label_status_name: 'Estado: %{name}'

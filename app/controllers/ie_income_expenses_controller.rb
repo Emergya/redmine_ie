@@ -66,6 +66,7 @@ class IeIncomeExpensesController < ApplicationController
         @trackers = Tracker.where("id NOT IN (?)", forbidden_trackers).collect{|p| [p.name, p.id]}
         # Tipos de campo para fecha de inicio y fecha de fin: 'attr', 'cf', 'status_id'
         @start_field_type = @income_expense.present? ? @income_expense.start_field_type : 'attr'
+        @planned_end_field_type = @income_expense.present? ? @income_expense.planned_end_field_type : 'attr'
         @end_field_type = @income_expense.present? ? @income_expense.end_field_type : 'attr'
     end
 
@@ -99,7 +100,7 @@ class IeIncomeExpensesController < ApplicationController
 
     private
         def ie_params
-            params.require(:ie_income_expense).permit(:tracker_id, :amount_field_id, :start_date_field, :start_field_type, :end_date_field, :end_field_type, :type)
+            params.require(:ie_income_expense).permit(:tracker_id, :amount_field_id, :start_date_field, :start_field_type, :planned_end_date_field, :planned_end_field_type, :end_date_field, :end_field_type, :type)
         end
 
         def find_ie

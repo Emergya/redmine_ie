@@ -1,4 +1,5 @@
 require 'ie/tracker_patch'
+require 'ie/issue_patch'
 
 Redmine::Plugin.register :redmine_ie do
 	name 'Income & Expenses'

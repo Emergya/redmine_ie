@@ -37,6 +37,11 @@ module IeIncomeExpensesHelper
         IeIncomeExpense::ALLOWED_FIELD_TYPES.map{|ft| [l(:"ie.label_#{ft}_plural"), ft]}
 	end
 
+	# Muestra opciones de tipos de campo de fin planificado
+	def get_planned_fields_type_options
+        (IeIncomeExpense::ALLOWED_FIELD_TYPES - [:status_id]).map{|ft| [l(:"ie.label_#{ft}_plural"), ft]}
+	end
+
 	# Imprime nombre de campo de inicio
 	def income_expense_start_date_field(ie)
 		income_expense_date_field(ie.start_field_type, ie.start_date_field)
@@ -45,6 +50,11 @@ module IeIncomeExpensesHelper
 	# Imprime nombre de campo de fin
 	def income_expense_end_date_field(ie)
 		income_expense_date_field(ie.end_field_type, ie.end_date_field)
+	end
+
+	# Imprime nombre de campo de fin planificado
+	def income_expense_planned_end_date_field(ie)
+		income_expense_date_field(ie.planned_end_field_type, ie.planned_end_date_field)
 	end
 
 	def income_expense_date_field(type, field)
