@@ -10,7 +10,7 @@ class IeIncomeExpense < ActiveRecord::Base
 	# Validaciones
 	validates_presence_of :tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type
 	validates :tracker_id, :amount_field_id, numericality: { only_integer: true, greater_than: 0, message: l(:"validation.flash_create_error") }
-	validate :check_fields_start_and_end_date
+	#validate :check_fields_start_and_end_date
 
 
 	# Returns the Subclasses of IeIncomeExpenses.  Each Subclass needs to be
@@ -45,16 +45,24 @@ class IeIncomeExpense < ActiveRecord::Base
 			errors.add :base, l(:"validation.flash_create_error") if !(/^\d*$/.match(self.start_date_field) || ALLOWED_ISSUE_FIELDS.include?(self.start_date_field.to_sym)) || !(/^\d*$/.match(self.end_date_field) || ALLOWED_ISSUE_FIELDS.include?(self.end_date_field.to_sym))
 		end
 
+		# Get issues where start/end field date were/are minor than specified date or start/end status has been reached
+		# Params:
+		# - start_end: allow to select if we will compare start date ('start' value) or end date ('end' value)
+		# - projects: array of project ids
+		# - date: point of reference date. It's used both for current date and get corresponding start/end values of the issues
 		def get_issues(start_end, projects, date)
 			type = self["#{start_end}_field_type"]
-			field = self["#{start_end}_date_field"]
+			# field = self["#{start_end}_date_field"]
+			# field = (type == 'status_id') ? JSON.parse(self["#{start_end}_date_field"]).map{|e| e.gsub('"', "'")} : self["#{start_end}_date_field"]
+			field = (type == 'status_id') ? JSON.parse(self["#{start_end}_date_field"]) : self["#{start_end}_date_field"]
 
 			# Join para el importe actual
 			join_current_amount = "LEFT JOIN custom_values AS current_amount ON current_amount.customized_type = 'Issue' AND current_amount.customized_id = issues.id AND current_amount.custom_field_id = #{amount_field_id}"
 			# Join para el valor de la fecha cuando el tipo es 'cf'
 			join_cf_current = "LEFT JOIN custom_values ON custom_values.customized_type = 'Issue' AND custom_values.customized_id = issues.id AND custom_values.custom_field_id = #{field}"
 			# Condición para que se cumpla que la petición es estimada/incurrida cuando el tipo es 'status_id'
-			where_status_current = "issues.status_id = #{field}"
+			# where_status_current = "issues.status_id = #{field}"
+			where_status_current = "issues.status_id IN ("+Array(field).join(',')+")"
 			# Condición para que se cumpla que la petición es estimada/incurrida cuando el tipo es 'attr'
 			where_attr_current = "DATE(issues.#{field}) <= '#{date}'"
 			# Condición para que se cumpla que la petición es estimada/incurrida cuando el tipo es 'cf'
@@ -86,7 +94,8 @@ class IeIncomeExpense < ActiveRecord::Base
 					property = 'attr'
 					prop_key = 'status_id'
 					# Condition for scheduled/incurred when there is a change on status value after "date"
-					condition_next_change = "next_change.old_value = #{field}"
+					# condition_next_change = "next_change.old_value = #{field}"
+					condition_next_change = "next_change.old_value IN ("+Array(field).join(',')+")"
 					# Condition for scheduled/incurred when there are no changes on status value after "date"
 					join_current_value = ""
 					condition_current = where_status_current
@@ -132,7 +141,8 @@ class IeIncomeExpense < ActiveRecord::Base
 		# Solo para el punto de vista actual
 		def get_issues_interval(start_end, projects, start_date, end_date)
 			type = self["#{start_end}_field_type"]
-			field = self["#{start_end}_date_field"]
+			# field = self["#{start_end}_date_field"]
+			field = (type == 'status_id') ? JSON.parse(self["#{start_end}_date_field"]) : self["#{start_end}_date_field"]
 
 			if planned_end_field_type == 'cf'
 				# Join para la fecha de fin estimada (cuando es de tipo 'cf')
@@ -154,7 +164,8 @@ class IeIncomeExpense < ActiveRecord::Base
 			case type
 			when 'status_id'
 				join_value = ""
-				condition = "issues.status_id = #{field}"
+				# condition = "issues.status_id = #{field}"
+				condition = "issues.status_id IN ("+Array(field).join(',')+")"
 			when 'attr'
 				join_value = ""
 				condition = "DATE(issues.#{field}) <= '#{end_date}'"

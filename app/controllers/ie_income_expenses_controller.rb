@@ -100,6 +100,8 @@ class IeIncomeExpensesController < ApplicationController
 
     private
         def ie_params
+            params[:ie_income_expense][:start_date_field] = params[:ie_income_expense][:start_date_field].to_json if params[:ie_income_expense][:start_date_field].is_a?(Array)
+            params[:ie_income_expense][:end_date_field] = params[:ie_income_expense][:end_date_field].to_json if params[:ie_income_expense][:end_date_field].is_a?(Array)
             params.require(:ie_income_expense).permit(:tracker_id, :amount_field_id, :start_date_field, :start_field_type, :planned_end_date_field, :planned_end_field_type, :end_date_field, :end_field_type, :type)
         end
 

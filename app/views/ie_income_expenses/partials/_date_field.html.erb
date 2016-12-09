@@ -1,1 +1,4 @@
-<%= select_tag "ie_income_expense[#{type}_date_field]", options_for_select(get_fields_type_date(@tracker, field_type), default_value) %>
+<% name = (field_type == 'status_id') ? "ie_income_expense[#{type}_date_field][]" : "ie_income_expense[#{type}_date_field]" %>
+<% default_value = (default_value.present? and field_type == 'status_id') ? JSON.parse(default_value) : default_value %>
+<%= select_tag name, options_for_select(get_fields_type_date(@tracker, field_type), default_value), :style => "vertical-align: top;", :multiple => (default_value.present? and field_type == 'status_id' and default_value.length > 1) %>
+<%= content_tag :span, '&nbsp;'.html_safe, class: 'toggle-multiselect' if field_type == 'status_id' %>

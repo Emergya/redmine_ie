@@ -3,3 +3,9 @@
 <div id="form">
 	<%= render :partial => '/ie_income_expenses/partials/form' %>
 </div>
+
+<script>
+$(document).on('click', '.toggle-multiselect', function() {
+    toggleMultiSelect($(this).siblings('select'));
+  });
+</script>

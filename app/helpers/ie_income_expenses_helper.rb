@@ -64,7 +64,7 @@ module IeIncomeExpensesHelper
 		when 'cf'
 			l("ie.label_custom_field_name", :name => CustomField.find(field).name)
 		when 'status_id'
-			l("ie.label_status_name", :name => IssueStatus.find(field).name)
+			l("ie.label_status_name", :name => IssueStatus.find(JSON.parse(field)).map(&:name).join(', '))
 		end
 	end
 end
