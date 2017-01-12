@@ -1,5 +1,7 @@
 # Spanish strings go here for Rails i18n
 es:
+  field_currency: Moneda
+
   fixed_expenses: 'Gastos fijos'
   variable_expenses: 'Gastos variables'
   variable_income: 'Ingresos variables'
@@ -15,6 +17,7 @@ es:
 
     label_type: 'Tipo'
     label_tracker: 'Tipo de petición'
+    label_local_amount: 'Importe (Moneda local)'
     label_amount: 'Importe'
     label_start_date: 'Fecha de inicio'
     label_planned_end_date: 'Fecha de fin planificada'
@@ -27,10 +30,20 @@ es:
     label_cf_plural: 'Campos personalizados'
     label_status_id_plural: 'Estados'
 
+    settings:
+      title_plugins_integration: Integración con otros plugins
+      text_plugins_integration: Activa las siguientes opciones únicamente si tienes correctamente instalado y configurado el plugin indicado.
+      label_plugin_currency: Plugin Currency
+      text_currency_field: Establece un campo personalizado con el contenido de las divisas registradas
+      label_currency_field: Campo de divisas
+      label_sync_currency_field: Sincronizar con divisas
+      text_confirm_sync_currency_field: La opciones registradas en el campo personalizado seleccionado se perderán. ¿Está seguro que desea seguir con la sincronización con el plugin Currency?
+      #text_plugin_currency: Asegurate de haber definido un campo personalizado de tipo Key/Value list en la configuración del plugin 
+      text_sync_success: Sincronización realizada correctamente.
+      text_sync_fail: Se ha producido un error durante la sincronización. 
+
   validation:
     flash_create_notice: 'El tipo de gasto/ingreso se ha realizado correctamente.'
-    flash_create_error: 'Es obligatorio rellenar cada uno de los campos del formulario.'
     flash_update_notice: 'El tipo de gasto/ingreso se ha actualizado correctamente.'
-    flash_update_error: 'Es obligatorio rellenar cada uno de los campos del formulario.'
     flash_destroy_notice: 'El gasto/ingreso se ha eliminado correctamente.'
-    flash_destroy_error: 'Se ha producido un error al intentar eliminar el gasto/ingreso.'
+    different_amount_local_amount: 'Los campos Importe e Importe (Moneda local) deben ser distintos.'

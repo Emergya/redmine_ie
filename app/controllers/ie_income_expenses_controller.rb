@@ -21,7 +21,7 @@ class IeIncomeExpensesController < ApplicationController
             flash[:notice] = l(:"validation.flash_create_notice")
             redirect_to ie_income_expenses_path
         else
-            flash[:error] = l(:"validation.flash_create_error")
+            flash[:error] = @income_expense.errors.full_messages.join('<br>').html_safe
             redirect_to action: 'new', :type => params[:ie_income_expense][:type]
         end
     end
@@ -35,7 +35,7 @@ class IeIncomeExpensesController < ApplicationController
           flash[:notice] = l(:"validation.flash_update_notice")
           redirect_to ie_income_expenses_path
         else
-          flash[:error] = l(:"validation.flash_update_error")
+          flash[:error] = @income_expense.errors.full_messages.join('<br>').html_safe
           redirect_to action: 'edit', :type => params[:ie_income_expense][:type]
         end
     end
@@ -44,7 +44,7 @@ class IeIncomeExpensesController < ApplicationController
         if @income_expense.destroy
             flash[:notice] = l(:'validation.flash_destroy_notice')
         else
-            flash[:error] = l(:'validation.flash_destroy_error')
+            flash[:error] = @income_expense.errors.full_messages.join('<br>').html_safe
         end
 
         redirect_to ie_income_expenses_path
@@ -98,11 +98,24 @@ class IeIncomeExpensesController < ApplicationController
         end
     end
 
+    def get_currency_exchange
+        exchange = 0
+        if params[:currency_enum].present?
+            cfe = CustomFieldEnumeration.find(params[:currency_enum])
+            if cfe.present?
+                currency = IE::Integration.get_currency_by_name(cfe.name)
+                exchange = currency.exchange if currency.present?
+            end
+        end
+
+        render :text => exchange, :layout => false
+    end
+
     private
         def ie_params
             params[:ie_income_expense][:start_date_field] = params[:ie_income_expense][:start_date_field].to_json if params[:ie_income_expense][:start_date_field].is_a?(Array)
             params[:ie_income_expense][:end_date_field] = params[:ie_income_expense][:end_date_field].to_json if params[:ie_income_expense][:end_date_field].is_a?(Array)
-            params.require(:ie_income_expense).permit(:tracker_id, :amount_field_id, :start_date_field, :start_field_type, :planned_end_date_field, :planned_end_field_type, :end_date_field, :end_field_type, :type)
+            params.require(:ie_income_expense).permit(:tracker_id, :local_amount_field_id, :amount_field_id, :start_date_field, :start_field_type, :planned_end_date_field, :planned_end_field_type, :end_date_field, :end_field_type, :type)
         end
 
         def find_ie

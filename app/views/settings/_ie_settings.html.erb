@@ -1,0 +1,56 @@
+<fieldset>
+	<legend><%= l(:"ie.settings.title_plugins_integration") %></legend>
+	<div>
+    	<%= l(:"ie.settings.text_plugins_integration") %>
+    </div>
+    <br>
+	<fieldset>
+		<legend><%= check_box_tag 'settings[plugin_currency]', true, @settings['plugin_currency'].present? %><%=l(:"ie.settings.label_plugin_currency")%></legend>
+		<div id="currency_plugin_config">
+			<div>
+		    	<%=l(:"ie.settings.text_currency_field")%>
+		    </div>
+			</br>
+			<p>
+				<label><%=l(:"ie.settings.label_currency_field")%></label>
+				<%= select_tag 'settings[currency_field]',
+			      ('<option></option>' +
+			        options_from_collection_for_select(CustomField.where(field_format: 'enumeration'), :id, :name, @settings['currency_field'])).html_safe %>
+			    <%= link_to '', '#', :class => 'icon icon-reload', :onclick => "if (confirm('#{l(:'ie.settings.text_confirm_sync_currency_field')}')){ sync_currency_field(); }", :title => l(:'ie.settings.label_sync_currency_field') %>
+			</p>
+		</div>
+	</fieldset>
+</fieldset>
+
+<script>
+$(document).ready(function(){
+	enable_disable_currency_config();
+	$(document).on('change', '#settings_plugin_currency', function(){
+		enable_disable_currency_config();
+	});
+});
+
+function enable_disable_currency_config(){
+	if ($('#settings_plugin_currency').prop('checked')){
+		$('#currency_plugin_config').show();
+	} else {
+		$('#currency_plugin_config').hide();
+	}
+}
+
+function sync_currency_field(){
+	cf = $('#settings_currency_field').val();
+	$.ajax({
+		url: '/sync_currency_field',
+		data: {custom_field: cf},
+		success: function(result){
+			$('#content .flash').remove();
+			if (result == 'success'){
+				$('#content').prepend("<div class='flash notice' id='flash_notice'><%=l(:'ie.settings.text_sync_success')%></div>");
+			} else {
+				$('#content').prepend("<div class='flash error' id='flash_error'><%=l(:'ie.settings.text_sync_fail')%></div>");
+			}
+		}
+	});
+}
+</script>

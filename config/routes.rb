@@ -9,7 +9,9 @@ RedmineApp::Application.routes.draw do
 	get '/get_custom_fields', :controller => 'ie_income_expenses', :action => 'get_custom_fields'
 	get '/update_field_options', :controller => 'ie_income_expenses', :action => 'update_field_options'
 
-	# Ruta para recoger los campos del modelo Issue de tipo Fecha.
-	get '/get_issue_date_fields', :controller => 'ie_income_expenses', :action => 'get_issue_date_fields'
+	# Ruta para recoger el factor de conversión de una moneda
+	get '/get_currency_exchange', :controller => 'ie_income_expenses', :action => 'get_currency_exchange'
 
+	# Ruta para sincronizar un campo personalizado con el listado de divisas
+	match '/sync_currency_field' => 'custom_fields#sync_currency_field', :via => [:get, :post]
 end

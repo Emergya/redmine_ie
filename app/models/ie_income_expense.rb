@@ -8,9 +8,11 @@ class IeIncomeExpense < ActiveRecord::Base
 	ALLOWED_FIELD_TYPES = [:attr, :cf, :status_id]
 
 	# Validaciones
-	validates_presence_of :tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type
-	validates :tracker_id, :amount_field_id, numericality: { only_integer: true, greater_than: 0, message: l(:"validation.flash_create_error") }
-	#validate :check_fields_start_and_end_date
+	validates_presence_of :tracker_id, :amount_field_id, :start_date_field, :end_date_field, :type, :start_field_type, :end_field_type, :planned_end_date_field, :planned_end_field_type
+	validates :tracker_id, :amount_field_id, numericality: { only_integer: true, greater_than: 0}
+	validate :different_amount_local_amount
+
+	after_save :update_currency_amount, :if => Proc.new{IE::Integration.currency_plugin_enabled?}
 
 
 	# Returns the Subclasses of IeIncomeExpenses.  Each Subclass needs to be
@@ -40,9 +42,9 @@ class IeIncomeExpense < ActiveRecord::Base
 	end
 
 	private
-		# Se comprueba que la fecha de inicio y de fin es un numero entero y pertenece a un campo personalizado, o se encuentra en ALLOWED_ISSUE_FIELDS.
-		def check_fields_start_and_end_date
-			errors.add :base, l(:"validation.flash_create_error") if !(/^\d*$/.match(self.start_date_field) || ALLOWED_ISSUE_FIELDS.include?(self.start_date_field.to_sym)) || !(/^\d*$/.match(self.end_date_field) || ALLOWED_ISSUE_FIELDS.include?(self.end_date_field.to_sym))
+		# Comprueba que el campo amount_field_id y local_amount_field_id sean diferentes
+		def different_amount_local_amount
+			errors.add :base, l(:"validation.different_amount_local_amount") if amount_field_id == local_amount_field_id
 		end
 
 		# Get issues where start/end field date were/are minor than specified date or start/end status has been reached
@@ -180,6 +182,10 @@ class IeIncomeExpense < ActiveRecord::Base
 				joins(join_amount+" "+join_planned_end_date+" "+join_value).
 				where("issues.project_id IN (#{projects.join(',')}) AND "+condition_planned_end_date+" AND "+condition).
 				select("issues.*, current_amount.value AS amount").to_a
+		end
+
+		def update_currency_amount
+			self.issues.map(&:update_amount) if amount_field_id.present? and local_amount_field_id.present?
 		end
 end
 

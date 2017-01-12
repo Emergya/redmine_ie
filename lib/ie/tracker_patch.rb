@@ -8,7 +8,7 @@ module IE
 			base.send(:include, InstanceMethods)
 
 			base.class_eval do
-				has_many :ie_income_expenses, :dependent => :destroy
+				has_one :ie_income_expense, :dependent => :destroy
 			end
 		end
 

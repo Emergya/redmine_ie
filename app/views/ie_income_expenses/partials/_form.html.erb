@@ -2,6 +2,9 @@
 	<div class="box tabular">
 		<p><%= f.label l(:"ie.label_type")+": " %> <%= get_income_expense_type(@type) %></p> <%= f.hidden_field :type  %>
 		<p><%= f.label l(:"ie.label_tracker")+": " %> <%= f.select :tracker_id, options_for_select(@trackers,@tracker.id), {}, :data => { :remote => true, :url => get_custom_fields_path(:type => params[:type], :id => @income_expense.id) } %></p>
+		<% if IE::Integration.currency_plugin_enabled? %>
+			<p><%= f.label l(:"ie.label_local_amount")+": " %> <%= f.select :local_amount_field_id, options_for_select([""]+get_fields_type_numeric(@tracker),@income_expense.local_amount_field_id) %></p>
+		<% end %>
 		<p><%= f.label l(:"ie.label_amount")+": " %> <%= f.select :amount_field_id, options_for_select(get_fields_type_numeric(@tracker),@income_expense.amount_field_id) %></p>
 		<p><%= f.label l(:"ie.label_start_date")+": " %> 
 			<%= f.select :start_field_type, options_for_select(get_fields_type_options, @start_field_type), {}, :data => { :remote => true, :url => update_field_options_path(:type => 'start', :ie_income_expense => {:tracker_id => @tracker}) } %>

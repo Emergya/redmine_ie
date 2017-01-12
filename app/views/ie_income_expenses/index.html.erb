@@ -9,6 +9,9 @@
 				<thead>
 					<tr>
 						<th><%=l(:"ie.label_tracker")%></th>
+						<%if IE::Integration.currency_plugin_enabled? %>
+							<th><%=l(:"ie.label_local_amount")%></th>
+						<% end %>
 						<th><%=l(:"ie.label_amount")%></th>
 						<th><%=l(:"ie.label_start_date")%></th>
 						<th><%=l(:"ie.label_planned_end_date")%></th>
@@ -21,6 +24,9 @@
 					<% income_expenses.each do |income_expense| %>
 					<tr class="<%= cycle('odd', 'even') %>">
 						<td class='name'><%= Tracker.find(income_expense.tracker_id).name %></td>
+						<%if IE::Integration.currency_plugin_enabled? %>
+							<td><%= income_expense.local_amount_field_id.present? ? CustomField.find(income_expense.local_amount_field_id).name : "-" %></td>
+						<% end %>
 						<td><%= CustomField.find(income_expense.amount_field_id).name %></td>
 						<td><%= income_expense_start_date_field(income_expense) %></td>
 						<td><%= income_expense_planned_end_date_field(income_expense) %></td>

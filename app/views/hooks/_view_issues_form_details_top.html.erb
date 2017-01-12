@@ -1,0 +1,41 @@
+<% if IE::Integration.currency_plugin_enabled? and IeIncomeExpense.get_trackers.include?(@issue.tracker_id) %>
+	<% ie = IeIncomeExpense.where(tracker_id: @issue.tracker_id).first %>
+	<% if ie.local_amount_field_id.present? and ie.amount_field_id.present? %>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				currency =  $("#issue_custom_field_values_<%=IE::Integration.currency_field_id%>");
+				lamount = $("#issue_custom_field_values_<%=ie[:local_amount_field_id]%>");
+				amount = $("#issue_custom_field_values_<%=ie[:amount_field_id]%>");
+
+				<% if @issue.new_record? and IE::Integration.get_prefered_currency.present? %>
+					$('option:contains("<%=IE::Integration.get_prefered_currency[:name]%>")', currency).prop('selected', true);
+				<% end %>
+
+				if (currency.length > 0 && lamount.length > 0 && amount.length > 0){
+					$(amount).attr("readonly", true);
+
+					$(currency).on('change', function(){
+						set_total_amount();
+					});
+
+					$(lamount).on('change', function(){
+						set_total_amount();
+					});
+				}
+			});
+
+			function set_total_amount(){
+				if ($(lamount).val() != undefined){
+					$.ajax({
+						url: '/get_currency_exchange',
+						data: {currency_enum: $(currency).val()},
+						success: function(exchange){
+							$(amount).val(($(lamount).val()/exchange).toFixed(2));
+							$(amount).trigger('change');
+						}
+					});
+				}
+			}
+		</script>
+	<% end %>
+<% end %>
