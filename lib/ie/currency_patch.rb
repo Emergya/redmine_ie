@@ -36,7 +36,7 @@ module IE
         if exchange_changed? or currency_type_changed?
           issues = Issue.joins("LEFT JOIN custom_values AS cv ON cv.customized_type='Issue' AND cv.customized_id=issues.id AND cv.custom_field_id=#{IE::Integration.currency_field_id} LEFT JOIN custom_field_enumerations AS cfe ON cfe.id = cv.value").
             where("issues.tracker_id IN (?) AND cfe.name = ?", IeIncomeExpense.get_trackers, self.name).
-            map(&:update_amount)
+            map(&:save)
         end
       end
 
