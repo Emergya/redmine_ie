@@ -67,7 +67,7 @@ module IE
         begin
           #if IE::Integration.currency_plugin_enabled?
             currency_field = custom_values.find_by_custom_field_id(IE::Integration.currency_field_id)
-            IE::Integracion.get_currency_by_name(CustomFieldEnumeration.find(currency_field.value).name)
+            IE::Integration.get_currency_by_name(CustomFieldEnumeration.find(currency_field.value).name)
           #else
           #  nil
           #end
