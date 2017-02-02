@@ -2,7 +2,7 @@ class IeIncomeExpensesController < ApplicationController
     layout 'admin'
 
     skip_before_filter :authorize, :only => [:get_custom_fields, :get_issue_date_field, :update_field_options]
-    before_filter :require_admin, :except => :index
+    before_filter :require_admin, :except => [:index, :get_currency_exchange]
     before_filter :find_ie, :only => [:edit, :update, :destroy, :get_custom_fields, :update_field_options]
     before_filter :get_form_data, :only => [:new, :edit, :get_custom_fields]
 

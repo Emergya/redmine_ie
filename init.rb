@@ -15,5 +15,5 @@ Redmine::Plugin.register :redmine_ie do
 
   	settings :default => {}, :partial => 'settings/ie_settings'
 
-	menu :admin_menu, :admin, { :controller => 'ie_income_expenses', :action => 'index' }, :html => { :class => 'issue_statuses' }, :caption => 'Gastos e Ingresos'
+	menu :admin_menu, :"ie.label_income_expenses", { :controller => 'ie_income_expenses', :action => 'index' }, :html => { :class => 'issue_statuses' }, :caption => :"ie.label_income_expenses"
 end
