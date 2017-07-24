@@ -52,7 +52,7 @@ class IeIncomeExpense < ActiveRecord::Base
 		# - start_end: allow to select if we will compare start date ('start' value) or end date ('end' value)
 		# - projects: array of project ids
 		# - date: point of reference date. It's used both for current date and get corresponding start/end values of the issues
-		def get_issues(start_end, projects, date)
+		def get_issues(start_end, projects, date, all = false)
 			type = self["#{start_end}_field_type"]
 			# field = self["#{start_end}_date_field"]
 			# field = (type == 'status_id') ? JSON.parse(self["#{start_end}_date_field"]).map{|e| e.gsub('"', "'")} : self["#{start_end}_date_field"]
@@ -83,6 +83,10 @@ class IeIncomeExpense < ActiveRecord::Base
 					condition_current = where_cf_current
 				else
 					return []
+				end
+
+				if all.present?
+					condition_current = "true"
 				end
 
 				result = issues.
@@ -126,6 +130,12 @@ class IeIncomeExpense < ActiveRecord::Base
 				query_next_change = "SELECT jd.id FROM journal_details AS jd LEFT JOIN journals AS j ON jd.journal_id = j.id WHERE j.journalized_type = 'Issue' AND j.journalized_id = issues.id AND DATE(j.created_on) > '#{date}' AND jd.property = '#{property}' AND jd.prop_key = '#{prop_key}' LIMIT 1"
 				# Get the id for the next journal that changes the custom_field value for amount
 				query_next_amount = "SELECT jd.id FROM journal_details AS jd LEFT JOIN journals AS j ON jd.journal_id = j.id WHERE j.journalized_type = 'Issue' AND j.journalized_id = issues.id AND DATE(j.created_on) > '#{date}' AND jd.property = 'cf' AND jd.prop_key = '#{amount_field_id}' LIMIT 1"
+
+
+				if all.present?
+					condition_current = "true"
+					condition_next_change = "true"
+				end
 
 				# Get issues that were created after "date" and meet with one of these conditions:
 				# * The "old_value" field in the next journal change makes that issue as scheduled/incurred (condition_next_change)
