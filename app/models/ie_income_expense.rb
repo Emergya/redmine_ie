@@ -52,6 +52,7 @@ class IeIncomeExpense < ActiveRecord::Base
 		# - start_end: allow to select if we will compare start date ('start' value) or end date ('end' value)
 		# - projects: array of project ids
 		# - date: point of reference date. It's used both for current date and get corresponding start/end values of the issues
+		# - all: ignore date conditions (for fixed expenses)
 		def get_issues(start_end, projects, date, all = false)
 			type = self["#{start_end}_field_type"]
 			# field = self["#{start_end}_date_field"]
