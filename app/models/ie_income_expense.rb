@@ -181,10 +181,10 @@ class IeIncomeExpense < ActiveRecord::Base
 				condition = "issues.status_id IN ("+Array(field).join(',')+")"
 			when 'attr'
 				join_value = ""
-				condition = "DATE(issues.#{field}) <= '#{end_date}'"
+				condition = start_end == 'end' ? "DATE(issues.#{field}) <= '#{end_date}'" : "true"
 			when 'cf'
 				join_value = join_cf
-				condition = "DATE(custom_values.value) <= '#{end_date}'"
+				condition = start_end == 'end' ? "DATE(custom_values.value) <= '#{end_date}'" : "true"
 			else
 				return []
 			end
