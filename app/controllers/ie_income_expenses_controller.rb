@@ -104,7 +104,23 @@ class IeIncomeExpensesController < ApplicationController
             cfe = CustomFieldEnumeration.find(params[:currency_enum])
             if cfe.present?
                 currency = IE::Integration.get_currency_by_name(cfe.name)
-                exchange = currency.exchange if currency.present?
+                if currency.present? and params[:year].present?
+                    cer = currency.currency_exchange_rate.find_by(year: params[:year].to_i)
+                    if cer.present?
+                        exchange = cer.exchange
+                    else
+                        begin
+                            previous_years_currency_exchange_rates = currency.currency_exchange_rate.where("year < ?", params[:year].to_i).order(year: "desc");
+                            if previous_years_currency_exchange_rates.present?
+                                exchange = previous_years_currency_exchange_rates.first.exchange.to_f
+                            else
+                                exchange = currency.currency_exchange_rate.where("year > ?", params[:year].to_i).order(year: "asc").first.exchange.to_f
+                            end
+                        rescue
+                            exchange = Float::MAX
+                        end
+                    end
+                end
             end
         end
 

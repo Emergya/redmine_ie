@@ -6,6 +6,7 @@
 				currency =  $("#issue_custom_field_values_<%=IE::Integration.currency_field_id%>");
 				lamount = $("#issue_custom_field_values_<%=ie[:local_amount_field_id]%>");
 				amount = $("#issue_custom_field_values_<%=ie[:amount_field_id]%>");
+				plannedenddate = '<%=ie[:planned_end_field_type]%>' == 'attr'? $("#issue_<%=ie[:planned_end_date_field]%>") : $("#issue_custom_field_values_<%=ie[:planned_end_date_field]%>");
 
 				<% if @issue.new_record? and !@issue.copy? and IE::Integration.get_prefered_currency.present? %>
 					$('option:contains("<%=IE::Integration.get_prefered_currency[:name]%>")', currency).prop('selected', true);
@@ -21,6 +22,10 @@
 					$(lamount).on('change', function(){
 						set_total_amount();
 					});
+
+					$(plannedenddate).on('change', function(){
+						set_total_amount();
+					});
 				}
 			});
 
@@ -28,7 +33,7 @@
 				if ($(lamount).val() != undefined){
 					$.ajax({
 						url: '/get_currency_exchange',
-						data: {currency_enum: $(currency).val()},
+						data: {currency_enum: $(currency).val(), year: $(plannedenddate).val().substr(0,4)},
 						success: function(exchange){
 							$(amount).val(($(lamount).val()/exchange).toFixed(2));
 							$(amount).trigger('change');

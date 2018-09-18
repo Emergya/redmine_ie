@@ -8,7 +8,7 @@ module IE
 
       base.class_eval do
         # safe_attributes 'currency', :if => lambda {|issue, user| issue.new_record? || user.allowed_to?(:edit_issues, issue.project) }
-        after_update :update_income_expenses, :if => Proc.new{IE::Integration.currency_plugin_enabled?}
+        # after_update :update_income_expenses, :if => Proc.new{IE::Integration.currency_plugin_enabled?}
 
         after_create :add_currency_field_enum, :if =>  Proc.new{IE::Integration.currency_plugin_enabled?}
         after_destroy :destroy_currency_field_enum, :if =>  Proc.new{IE::Integration.currency_plugin_enabled?}
@@ -32,13 +32,13 @@ module IE
     end
 
     module InstanceMethods
-      def update_income_expenses
-        if exchange_changed? or currency_type_changed?
-          issues = Issue.joins("LEFT JOIN custom_values AS cv ON cv.customized_type='Issue' AND cv.customized_id=issues.id AND cv.custom_field_id=#{IE::Integration.currency_field_id} LEFT JOIN custom_field_enumerations AS cfe ON cfe.id = cv.value").
-            where("issues.tracker_id IN (?) AND cfe.name = ?", IeIncomeExpense.get_trackers, self.name).
-            map(&:update_amount)
-        end
-      end
+      # def update_income_expenses
+      #   if exchange_changed? or currency_type_changed?
+      #     issues = Issue.joins("LEFT JOIN custom_values AS cv ON cv.customized_type='Issue' AND cv.customized_id=issues.id AND cv.custom_field_id=#{IE::Integration.currency_field_id} LEFT JOIN custom_field_enumerations AS cfe ON cfe.id = cv.value").
+      #       where("issues.tracker_id IN (?) AND cfe.name = ?", IeIncomeExpense.get_trackers, self.name).
+      #       map(&:update_amount)
+      #   end
+      # end
 
       def add_currency_field_enum
         CustomField.find(Setting.plugin_redmine_ie['currency_field']).enumerations << CustomFieldEnumeration.new({name: self.name})

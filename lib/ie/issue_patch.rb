@@ -33,14 +33,36 @@ module IE
 
       def update_amount
         if currency.present? and ie_income_expense.present? and ie_income_expense.local_amount_field_id.present? and ie_income_expense.amount_field_id.present?
-          if ((currency.currency_type == 'dinamic') or (currency.currency_type == 'static' and !billed?))
+          # if ((currency.currency_type == 'dinamic') or (currency.currency_type == 'static' and !billed?))
+            if ie_income_expense.planned_end_field_type == 'attr'
+              planned_end_year = due_date.year
+            elsif ie_income_expense.planned_end_field_type == 'cf'
+              planned_end_year = Date.parse(custom_values.find_by_custom_field_id(ie_income_expense.planned_end_date_field).value).year
+            end
+
             local_amount = custom_values.find_by_custom_field_id(ie_income_expense.local_amount_field_id)
             amount = custom_values.find_by_custom_field_id(ie_income_expense.amount_field_id)
             if amount.present? and local_amount.present?
-              amount.value = local_amount.value.to_f / currency.exchange.to_f
+              cer = currency.currency_exchange_rate.find_by(year: planned_end_year)
+              if cer.present?
+                exchange_rate = cer.exchange.to_f
+              else
+                begin
+                  previous_years_currency_exchange_rates = currency.currency_exchange_rate.where("year < ?", planned_end_year).order(year: "desc");
+                  if previous_years_currency_exchange_rates.present?
+                    exchange_rate = previous_years_currency_exchange_rates.first.exchange.to_f
+                  else
+                    exchange_rate = currency.currency_exchange_rate.where("year > ?", planned_end_year).order(year: "asc").first.exchange.to_f
+                  end
+                rescue
+                  exchange_rate = Float::MAX
+                end
+              end
+              amount.value = local_amount.value.to_f / exchange_rate
+              # amount.value = local_amount.value.to_f / currency.exchange.to_f
               amount.save
             end
-          end
+          # end
         end
       end
 

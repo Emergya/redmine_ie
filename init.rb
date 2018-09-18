@@ -3,6 +3,7 @@ require 'ie/issue_patch'
 require 'ie/integration'
 require 'ie/hooks'
 require 'ie/currency_patch'
+require 'ie/currency_exchange_rate_patch'
 require 'ie/custom_fields_controller_patch'
 
 Redmine::Plugin.register :redmine_ie do
