@@ -9,6 +9,7 @@ module IE
       base.class_eval do
         has_one :ie_income_expense, :through => :tracker
 
+        validate  :validate_has_planned_end_field
         after_save :update_amount
       end
     end
@@ -35,7 +36,7 @@ module IE
         if currency.present? and ie_income_expense.present? and ie_income_expense.local_amount_field_id.present? and ie_income_expense.amount_field_id.present?
           # if ((currency.currency_type == 'dinamic') or (currency.currency_type == 'static' and !billed?))
             if ie_income_expense.planned_end_field_type == 'attr'
-              planned_end_year = due_date.year
+              planned_end_year = self.read_attribute(ie_income_expense.planned_end_date_field).year
             elsif ie_income_expense.planned_end_field_type == 'cf'
               planned_end_year = Date.parse(custom_values.find_by_custom_field_id(ie_income_expense.planned_end_date_field).value).year
             end
@@ -81,6 +82,19 @@ module IE
           false
         rescue
           false
+        end
+      end
+
+      def validate_has_planned_end_field
+        if currency.present? and ie_income_expense.present? and ie_income_expense.local_amount_field_id.present? and ie_income_expense.amount_field_id.present?
+          if ie_income_expense.planned_end_field_type == 'attr'
+            fecha = self.read_attribute(ie_income_expense.planned_end_date_field)
+          elsif ie_income_expense.planned_end_field_type == 'cf'
+            fecha = custom_values.find_by_custom_field_id(ie_income_expense.planned_end_date_field)
+          else
+            return
+          end
+          errors.add(:base, l(:"validation.end_planned_date_not_found")) if fecha.blank?
         end
       end
 

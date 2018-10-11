@@ -47,3 +47,4 @@ es:
     flash_update_notice: 'El tipo de gasto/ingreso se ha actualizado correctamente.'
     flash_destroy_notice: 'El gasto/ingreso se ha eliminado correctamente.'
     different_amount_local_amount: 'Los campos Importe e Importe (Moneda local) deben ser distintos.'
+    end_planned_date_not_found: No se ha podido calcular el campo Importe debido a que no se ha especificado la fecha de fin planificada
